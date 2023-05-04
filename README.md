@@ -90,7 +90,6 @@ There are several user options which can be modified on the command line or in t
 - Singularity uses the `$HOME` directory as the default cache. This may cause errors if there are space limitations in `$HOME`. Specify a cache dir to store the image via: 
 ``` 
 export WORKDIR=$(pwd)
-export TMPDIR=[set to temp directory]
 export NXF_SINGULARITY_CACHEDIR=$WORKDIR/images
 export SINGULARITY_CACHEDIR=$WORKDIR/images
 
