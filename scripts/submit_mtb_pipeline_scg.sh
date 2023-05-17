@@ -12,7 +12,7 @@
 module load java nextflow
 # module load singularity # don't use on Stanford SCG
 
-export WORKDIR=/labs/jandr/walter/test/mtb-call2
+export WORKDIR=/labs/jandr/walter/tb/mtb-call2
 export TMPDIR=/tmp/kwalter
 export NXF_SINGULARITY_CACHEDIR=$WORKDIR/images
 
