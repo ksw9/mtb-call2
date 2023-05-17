@@ -25,11 +25,11 @@ process Kraken {
 
   # Select for reads directly assigned to Mycobacterium genus (G) (taxid 1763), reads assigned directly to Mycobacterium tuberculosis complex (G1) (taxid 77643), and reads assigned to Mycobacterium tuberculosis (S) and children. *this includes reads assigned to Mtb and those assigned to the genus, but not a different species.
   # N.B. A space is added to the header name to make them unique (otherwise a grep call with @ID123 would get not just @ID123, but also @ID1234, etc)
-  grep -E 'Mycobacterium (taxid 1763)|Mycobacterium tuberculosis' ${sample_id}.out | awk '{print \$2}" "' > ${sample_id}_reads.list
+  grep -E 'Mycobacterium (taxid 1763)|Mycobacterium tuberculosis' ${sample_id}.out | awk '{print \$2" "}' > ${sample_id}_reads.list
   echo "" >> ${sample_id}_reads.list # Add empty line otherwise last read name will not be passed to while call at lines 39,51
 
   # Use bbmap to select reads corresponding to taxa of interest.
-  filterbyname.sh int=false in1=${sample_id}_plain_1.fq.gz  in2=${sample_id}_plain_2.fq.gz  out1=${sample_id}_kr_1.fq.gz out2=${sample_id}_kr_2.fq.gz names=${sample_id}_reads.list include=true overwrite=true
+  # filterbyname.sh int=false in1=${sample_id}_plain_1.fq.gz  in2=${sample_id}_plain_2.fq.gz  out1=${sample_id}_kr_1.fq.gz out2=${sample_id}_kr_2.fq.gz names=${sample_id}_reads.list include=true overwrite=true
   
   # bbmap tends to glitch, so the following code is meant to replace it
   bgzip -d ${sample_id}_plain_1.fq.gz
