@@ -32,7 +32,7 @@ tar -xf k2_standard_08gb_20221209.tar.gz
 5. Modify the config file (nextflow.config):
   - update resources_dir (full path to directory resources)
   - update clusterOptions parameter to make arguments specific to cluster
-    - Stanford SCG: clusterOptions = "-A jandr --partition batch -N 1 --time=4:00:00 --mem-per-cpu 64G"
+    - Stanford SCG: clusterOptions = "-A jandr --partition batch -N 1 --time=4:00:00 --mem 96g --mem-per-cpu 64G"
   - if you are using a previously installed Kraken2 database, update kraken_db with the path
   - Note: the nextflow.config clusterOptions file take precedence over the SLURM submission script parameters.
 
