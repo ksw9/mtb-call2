@@ -25,7 +25,7 @@ process Kraken {
   
   # Use seqtk to select reads corresponding to the Mycobacterium genus and not corresponding to species other than M. tuberculosis
   seqtk subseq  ${read1} ${sample_id}_reads.list | bgzip > ${sample_id}_kr_1.fq.gz
-  seqtk subseq  ${read1} ${sample_id}_reads.list | bgzip > ${sample_id}_kr_2.fq.gz 
+  seqtk subseq  ${read2} ${sample_id}_reads.list | bgzip > ${sample_id}_kr_2.fq.gz 
   
 #   # Remove Illumina suffixes from read names (Kraken reads list does not include suffixes) 
 #   zcat ${read1} | sed 's|/1\$||' | bgzip > ${sample_id}_plain_1.fq.gz
