@@ -53,20 +53,19 @@ process MapReads_BWA {
 
   # Collect coverage stats with Picard
   picard CollectWgsMetrics \
-  -R ${reference_fasta} \
-  -I temp.bam \
-  -O ${sample_id}_coverage_stats.txt
+  R=${reference_fasta} \
+  I=temp.bam \
+  O=${sample_id}_coverage_stats.txt
 
   # Add/replace read groups for post-processing with GATK
   picard AddOrReplaceReadGroups \
-  -INPUT temp.bam \
-  -OUTPUT temp_rg.bam \
-  -RGID \${ID} \
-  -RGLB ${params.library} \
-  -RGPU \${PU} \
-  -RGPL ${params.seq_platform} \
-  -RGSM ${sample_id} \
-  --VERBOSITY DEBUG
+  INPUT=temp.bam \
+  OUTPUT=temp_rg.bam \
+  RGID=\${ID} \
+  RGLB=${params.library} \
+  RGPU=\${PU} \
+  RGPL=${params.seq_platform} \
+  RGSM=${sample_id}
 
   # Mark duplicates & produce library complexity metrics
   gatk MarkDuplicates \
