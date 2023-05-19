@@ -20,6 +20,6 @@ echo -e "sample\tfastq_1\tfastq_2\tbatch" > resources/input/${list_name}.tsv
 for fastq_1 in ${DATA_DIR}/*${suffix_1}; do
   fastq_2=${fastq_1/$suffix_1/$suffix_2}
   echo $fastq_2
-  samp=$(basename ${fastq_1/suffix_1})
+  samp=$(basename ${fastq_1/$suffix_1})
   echo -e "${samp}\t${fastq_1}\t${fastq_2}\t${batch}" >> resources/input/${list_name}.tsv
 done
