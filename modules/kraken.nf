@@ -24,8 +24,8 @@ process Kraken {
   grep -E 'Mycobacterium (taxid 1763)|Mycobacterium tuberculosis' ${sample_id}.out | awk '{print \$2}' > ${sample_id}_reads.list
   
   # Use seqtk to select reads corresponding to the Mycobacterium genus and not corresponding to species other than M. tuberculosis
-  seqtk subseq  ${read1} ${sample_id}_reads.list | bgzip > ${sample_id}_kr_1.fq.gz
-  seqtk subseq  ${read2} ${sample_id}_reads.list | bgzip > ${sample_id}_kr_2.fq.gz 
+#  seqtk subseq  ${read1} ${sample_id}_reads.list | bgzip > ${sample_id}_kr_1.fq.gz
+#  seqtk subseq  ${read2} ${sample_id}_reads.list | bgzip > ${sample_id}_kr_2.fq.gz 
   
 #   # Remove Illumina suffixes from read names (Kraken reads list does not include suffixes) 
 #   zcat ${read1} | sed 's|/1\$||' | bgzip > ${sample_id}_plain_1.fq.gz
@@ -37,7 +37,7 @@ process Kraken {
 #   echo "" >> ${sample_id}_reads.list # Add empty line otherwise last read name will not be passed to while call at lines 39,51
 # 
 #   # Use bbmap to select reads corresponding to taxa of interest.
-#   # filterbyname.sh int=false in1=${sample_id}_plain_1.fq.gz  in2=${sample_id}_plain_2.fq.gz  out1=${sample_id}_kr_1.fq.gz out2=${sample_id}_kr_2.fq.gz names=${sample_id}_reads.list include=true overwrite=true
+  filterbyname.sh int=false in1=${read1} in2=${read2} out1=${sample_id}_kr_1.fq.gz out2=${sample_id}_kr_2.fq.gz names=${sample_id}_reads.list include=true overwrite=true
 #   
 #   # bbmap tends to glitch, so the following code is meant to replace it
 #   bgzip -d ${sample_id}_plain_1.fq.gz
