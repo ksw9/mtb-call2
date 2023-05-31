@@ -2,7 +2,7 @@ process TrimFastQ {
 
   // Trim reads for quality
 
-  label 'slurm'
+  label 'trimgalore'
 
   //publishDir "${projectDir}/results/${batch}/${sample_id}/trim", mode: "copy", pattern: "*_val_{1,2}.fq.gz"
   publishDir "${projectDir}/results/${batch}/${sample_id}/trim", mode: "copy", pattern: "*_fastqc.{html,zip}"

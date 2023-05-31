@@ -2,7 +2,7 @@ process ConvertVCF {
 
   // Convert single sample VCF to fasta
 
-  label 'slurm'
+  label 'variantcalling'
 
   publishDir "${projectDir}/results/${batch}/${sample_id}/fasta", mode: "copy", pattern: "*.fa"
 
@@ -35,6 +35,7 @@ process ConvertVCF {
     sed "s/>NC_000962.3 Mycobacterium tuberculosis H37Rv, complete genome/>${sample_id}/g" > ${sample_id}_${variant_caller}_PPEmask.fa
   
   else
+
     # Output 1 - Consensus without ppe masking, but with quality filters applied (exclude indels). Positions absent from VCF will be included as consensus. 
     bcftools consensus --include "(TYPE!='indel' && FORMAT/DP >= ${params.depth_threshold}) && (QUAL >= ${params.qual_threshold}|| RGQ  >= ${params.qual_threshold})" --fasta-ref ${reference} --missing 'N' ${vcf} | \
     sed "s/>NC_000962.3 Mycobacterium tuberculosis H37Rv, complete genome/>${sample_id}/g" > ${sample_id}_${variant_caller}.fa

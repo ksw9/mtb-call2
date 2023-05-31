@@ -2,7 +2,7 @@ process VariantsLoFreq {
 
   // Variant calling with LoFreq
   
-  label 'slurm'
+  label 'variantcalling'
 
   publishDir "${projectDir}/results/${batch}/${sample_id}/vars", mode: "copy", pattern: "*{_lofreq_unfilt,_lofreq_filt}.vcf.gz"
 
@@ -32,7 +32,6 @@ process VariantsLoFreq {
   # Add FORMAT and SAMPLE fields for full VCF formatting (required for later annotation)
   sed -e '6i##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">' -e "s|FILTER\tINFO|FILTER\tINFO\tFORMAT\t${sample_id}|g" ${sample_id}_lofreq_filt_tmp.vcf | \
   awk -F"\t" -v genotype=1 -v OFS="\t" '/^[^#]/{ \$9 = "GT"; \$10 = genotype }1' | bgzip > ${sample_id}_lofreq_filt.vcf.gz
-
   """
 
 }

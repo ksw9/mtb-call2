@@ -30,8 +30,9 @@ def parseKraken2Report(report_name):
 
 def parseMappingReport(report_name):
     
-    report = open(report_name).read().split('\n\n')
-    
+
+    report = open(report_name).read().split('\n')
+  
     mapping_percentage = [float(line.split(' ')[-1][1:-1].split('%')[0]) for line in report if 'properly paired' in line][0]
     
     return mapping_percentage

@@ -2,7 +2,7 @@ process Kraken {
 
   // Filter reads taxonomically with Kraken
   
-  label 'slurm'
+  label 'kraken2'
 
   //publishDir "${projectDir}/results/${batch}/${sample_id}/kraken", mode: "copy", pattern: "*_kr_{1,2}.fq.gz"
   publishDir "${projectDir}/results/${batch}/${sample_id}/kraken", mode: "copy", pattern: "*_kraken.report"
@@ -23,9 +23,9 @@ process Kraken {
   ## Updating here ##
   grep -E 'Mycobacterium (taxid 1763)|Mycobacterium tuberculosis' ${sample_id}.out | awk '{print \$2}' > ${sample_id}_reads.list
   
-  # Use seqtk to select reads corresponding to the Mycobacterium genus and not corresponding to species other than M. tuberculosis
-  seqtk subseq  ${read1} ${sample_id}_reads.list | bgzip > ${sample_id}_kr_1.fq.gz
-  seqtk subseq  ${read2} ${sample_id}_reads.list | bgzip > ${sample_id}_kr_2.fq.gz 
+  # Use seqtk to select reads corresponding to the Mycobacterium genus and not corresponding to species other than M. tuberculosis (replaces code below)
+  seqtk subseq ${read1} ${sample_id}_reads.list | bgzip > ${sample_id}_kr_1.fq.gz
+  seqtk subseq ${read2} ${sample_id}_reads.list | bgzip > ${sample_id}_kr_2.fq.gz 
   
 #   # Remove Illumina suffixes from read names (Kraken reads list does not include suffixes) 
 #   zcat ${read1} | sed 's|/1\$||' | bgzip > ${sample_id}_plain_1.fq.gz
@@ -63,9 +63,4 @@ process Kraken {
 #     grep "\$pattern" -m 1 -A 3 ${sample_id}_plain_2_mod.fq
 # 
 #   done < ${sample_id}_reads.list | bgzip > ${sample_id}_kr_2.fq.gz
-#   
-  # Summarize Kraken statistics. 
-  #${projectDir}/scripts/kraken_stats.sh ${sample_id}_kraken.report
-  """
-
 }
