@@ -37,7 +37,7 @@ process Kraken {
 #   echo "" >> ${sample_id}_reads.list # Add empty line otherwise last read name will not be passed to while call at lines 39,51
 # 
 #   # Use bbmap to select reads corresponding to taxa of interest.
-#   # filterbyname.sh int=false in1=${sample_id}_plain_1.fq.gz  in2=${sample_id}_plain_2.fq.gz  out1=${sample_id}_kr_1.fq.gz out2=${sample_id}_kr_2.fq.gz names=${sample_id}_reads.list include=true overwrite=true
+  filterbyname.sh int=false in1=${read1} in2=${read2} out1=${sample_id}_kr_1.fq.gz out2=${sample_id}_kr_2.fq.gz names=${sample_id}_reads.list include=true overwrite=true
 #   
 #   # bbmap tends to glitch, so the following code is meant to replace it
 #   bgzip -d ${sample_id}_plain_1.fq.gz
