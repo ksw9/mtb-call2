@@ -60,25 +60,25 @@ else
 	
 fi
 
-# Requires: entrez-direct (conda), bwa, GATK, samtools, kraken2, all present in the container.
+# Requires: entrez-direct, bwa, bowtie2, GATK, samtools, kraken2, all present in the containers.
 # Run each step within the image. Need to mount local directory so that the resources are downloaded locally, not just in the container.
 
 ## 1. Reference genome ##
 # Download H37Rv reference fasta (alternatively, use efetch)
-${container} ${run_command} ${bind_option} ${other_options} ${image} /bin/bash -c "esearch -db nucleotide -query ${ncbi_id} | efetch -format fasta > ${ref_dir}${ref_name}"
+${container} ${run_command} ${bind_option} ${other_options} ${image}:efetch /bin/bash -c "esearch -db nucleotide -query ${ncbi_id} | efetch -format fasta > ${ref_dir}${ref_name}"
 
 # bwa index reference
-${container} ${run_command} ${bind_option} ${other_options} ${image} bwa index ${ref_dir}${ref_name}
+${container} ${run_command} ${bind_option} ${other_options} ${image}:mapping bwa index ${ref_dir}${ref_name}
 mv ${ref_dir}*.{amb,ann,bwt,pac,sa} ${bwa_index_dir}
 
 # bowtie2 index reference
-${container} ${run_command} ${bind_option} ${other_options} ${image} bowtie2-build ${ref_dir}${ref_name} ${bowtie2_index_dir}${bowtie_index_prefix}
+${container} ${run_command} ${bind_option} ${other_options} ${image}:mapping bowtie2-build ${ref_dir}${ref_name} ${bowtie2_index_dir}${bowtie_index_prefix}
 
 # Create fasta index file
-${container} ${run_command} ${bind_option} ${other_options} ${image} samtools faidx ${ref_dir}${ref_name}
+${container} ${run_command} ${bind_option} ${other_options} ${image}:mapping samtools faidx ${ref_dir}${ref_name}
 
 # create GATK reference dictionary
-${container} ${run_command} ${bind_option} ${other_options} ${image} gatk CreateSequenceDictionary -R ${ref_dir}${ref_name}
+${container} ${run_command} ${bind_option} ${other_options} ${image}:variantcalling gatk CreateSequenceDictionary -R ${ref_dir}${ref_name}
 mv ${ref_dir}${gatk_dictionary_name} ${gatk_dictionary_dir}
 
 ## 2. Masking bed file ##
@@ -86,20 +86,20 @@ mv ${ref_dir}${gatk_dictionary_name} ${gatk_dictionary_dir}
 
 ## 3. Annotation information ##
 # Download SnpEff for gene annotation.
-${container} ${run_command} ${bind_option} ${other_options} ${image} wget ${snpeff_url}
+${container} ${run_command} ${bind_option} ${other_options} ${image}:mapping wget ${snpeff_url}
 
 # Unzip file
 unzip snpEff_latest_core.zip
 rm snpEff_latest_core.zip
 
 # Download the updated M. tuberculosis annotations.
-${container} ${run_command} ${bind_option} ${other_options} ${image} java -jar snpEff/snpEff.jar download Mycobacterium_tuberculosis_h37rv
+${container} ${run_command} ${bind_option} ${other_options} ${image}:mapping java -jar snpEff/snpEff.jar download Mycobacterium_tuberculosis_h37rv
 
 ## 4. Kraken2 Database ##
 # download kraken2 database (requires ~100G) 
 # https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown
 # Doesn't currently work due to some issues with Kraken 2 code
-#${container} ${run_command} ${bind_option} ${other_options} ${image} kraken2-build --standard --threads $SLURM_CPUS_ON_NODE --db ${kraken2_db_dir}
+#${container} ${run_command} ${bind_option} ${other_options} ${image}:kraken2 kraken2-build --standard --threads $SLURM_CPUS_ON_NODE --db ${kraken2_db_dir}
 
 ## 5. Create reads list input with full paths to test data.
 cd ../test_reads

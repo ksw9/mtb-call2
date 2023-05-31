@@ -2,7 +2,7 @@ process MapReads_BWA {
 
   // Map reads and remove duplicates in same step
   
-  label 'slurm'
+  label 'mapping'
 
   publishDir "${projectDir}/results/${batch}/${sample_id}/bams", mode: "copy", pattern: "*_merged_mrkdup.bam"
   publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_mapping.log"

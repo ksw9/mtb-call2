@@ -2,7 +2,7 @@ process SummarizeRun {
 
   // Parse logs from TrimGalore, Kraken, BWA/Bowtie2, Tb-Profiler
   
-  label 'slurm'
+  label 'makesummary'
 
   publishDir "${projectDir}/results", mode: "copy", pattern: "pipeline_run_summary_*.tsv"
 

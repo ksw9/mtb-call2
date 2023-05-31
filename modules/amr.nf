@@ -2,7 +2,7 @@ process RunAMR {
 
   // Run AMR prediction tool. Removing for now
   
-  label 'slurm'
+  label 'amr'
 
   publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_amr.csv"
 
