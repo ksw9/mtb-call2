@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --time=24:00:00
 #SBATCH --nodes=1
-#SBATCH --account=owner-guest
-#SBATCH --partition=kingspeak-guest
+#SBATCH --account=walter
+#SBATCH --partition=notchpeak
 #SBATCH -o mtb-call_run-out-%j
 #SBATCH -e mtb-call_run-err-%j
 #SBATCH --mail-user=katharine.walter@hsc.utah.edu
