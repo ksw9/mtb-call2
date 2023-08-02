@@ -118,11 +118,16 @@ workflow {
 
   // MAKING SUMMARY REPORT ---------------- //
 
+  // Creating channel for make_run_summary.py script
+  Channel
+  .fromPath("${projectDir}/scripts/make_run_summary.py")
+  .set{summary_script}
+  
   // Creating channel for reads_list file (needed to parse trimming_reports)
   Channel
   .fromPath("${params.resources_dir}/${params.reads_list}")
   .set{reads_list_file}
 
-  SummarizeRun(reads_list_file, TrimFastQ.out.trimming_reports.flatten().collect(), Kraken.out.kraken_reports.collect(), mapping_reports.collect(), coverage_stats.collect(), dup_metrics.collect(), TbProfiler.out.tbprofiler_reports.collect())
+  SummarizeRun(summary_script, reads_list_file, TrimFastQ.out.trimming_reports.flatten().collect(), Kraken.out.kraken_reports.collect(), mapping_reports.collect(), coverage_stats.collect(), dup_metrics.collect(), TbProfiler.out.tbprofiler_reports.collect())
 
 }
