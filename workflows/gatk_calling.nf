@@ -9,6 +9,7 @@ workflow GATK {
 
   take:
   bam_files
+  low_coverage_mask
 	
   main:
   // GATK VARIANT CALLER ------------------ //
@@ -22,18 +23,24 @@ workflow GATK {
   // Channel for GATK dictionary (absolute path from params won't do since it has to be present in the dir where GATK is launched)
   gatk_dictionary = Channel.fromPath("${params.resources_dir}/${params.gatk_dictionary_path}")
 
-  // Channel for masking bed file required by "gatk VariantFiltration" in VariantsGATK
+  // Channel for ppe masking bed file required by "gatk VariantFiltration" in VariantsGATK
   bed_file = Channel.fromPath("${params.resources_dir}/${params.bed_path}")
 
-  // Channel for masking bed file index required by "gatk VariantFiltration" in VariantsGATK
+  // Channel for ppe masking bed file index required by "gatk VariantFiltration" in VariantsGATK
   bed_file_index = Channel.fromPath("${params.resources_dir}/${params.bed_index_path}")
 
   // Variant calling
-  VariantsGATK(reference_fasta, reference_fasta_index, gatk_dictionary, bed_file, bed_file_index, bam_files)
+  VariantsGATK(reference_fasta, reference_fasta_index, gatk_dictionary, bam_files)
 
   // CONVERTING VCF TO FASTA -------------- //
 
-  ConvertVCF("gatk", reference_fasta, VariantsGATK.out.gatk_vcf_filt,bed_file, bed_file_index)
+  // Join VariantsGATK.out.gatk_vcf_filt and low_coverage mask
+  VariantsGATK.out.gatk_vcf_filt
+  .join(low_coverage_mask, by: [0,2], remainder: false)
+  .set{ vcf_to_fasta_input }
+
+  // Convert vcf to fasta
+  ConvertVCF("gatk", reference_fasta, vcf_to_fasta_input, bed_file, bed_file_index)
 
   // ANNOTATE GATK VCF -------------------- //
 

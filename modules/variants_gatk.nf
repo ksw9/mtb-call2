@@ -10,8 +10,6 @@ process VariantsGATK {
   each path(reference)
   each path(reference_index)
   each path(dictionary)
-  each path(bed)
-  each path(bed_index)
   tuple val(sample_id), path(bam), val(batch)
 
   output:

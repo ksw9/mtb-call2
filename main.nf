@@ -13,6 +13,7 @@ include { Kraken } from './modules/kraken.nf'
 include { QuantTB } from './modules/quanttb.nf'
 include { MapReads_BWA } from './modules/map_reads_bwa.nf'
 include { MapReads_Bowtie } from './modules/map_reads_bowtie.nf'
+include { MakeLowCoverageMask } from './modules/make_low_coverage_mask.nf'
 include { RunAMR } from './modules/amr.nf'
 include { TbProfiler } from './modules/tb_profiler.nf'
 include { GATK } from './workflows/gatk_calling.nf'
@@ -105,8 +106,11 @@ workflow {
 
   // VARIANT CALLING ---------------------- //
 
+  // Making a bed mask for low coverage regions
+  MakeLowCoverageMask(bam_files)
+
   // GATK variant calling, consensus fasta generation, and cvs file annotation
-  GATK(bam_files)
+  GATK(bam_files, MakeLowCoverageMask.out.low_coverage_mask)
   
   // Running LoFreq variant calling and cvs file annotation, if desired
 
@@ -118,11 +122,16 @@ workflow {
 
   // MAKING SUMMARY REPORT ---------------- //
 
+  // Creating channel for make_run_summary.py script
+  Channel
+  .fromPath("${projectDir}/scripts/make_run_summary.py")
+  .set{summary_script}
+  
   // Creating channel for reads_list file (needed to parse trimming_reports)
   Channel
   .fromPath("${params.resources_dir}/${params.reads_list}")
   .set{reads_list_file}
 
-  SummarizeRun(reads_list_file, TrimFastQ.out.trimming_reports.flatten().collect(), Kraken.out.kraken_reports.collect(), mapping_reports.collect(), coverage_stats.collect(), dup_metrics.collect(), TbProfiler.out.tbprofiler_reports.collect())
+  SummarizeRun(summary_script, reads_list_file, TrimFastQ.out.trimming_reports.flatten().collect(), Kraken.out.kraken_reports.collect(), mapping_reports.collect(), coverage_stats.collect(), dup_metrics.collect(), TbProfiler.out.tbprofiler_reports.collect())
 
 }

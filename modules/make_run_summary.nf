@@ -4,9 +4,10 @@ process SummarizeRun {
   
   label 'makesummary'
 
-  publishDir "${projectDir}/results", mode: "copy", pattern: "pipeline_run_summary_*.tsv"
+  publishDir "${projectDir}/results", mode: "copy", pattern: "*_run_summary_*.tsv"
 
   input:
+  path summary_script
   path reads_list
   path trimming_reports
   path kraken_reports
@@ -16,10 +17,10 @@ process SummarizeRun {
   path tbprofiler_reports
 
   output:
-  path "pipeline_run_summary_*.tsv"
+  path "*_run_summary_*.tsv"
 
   """
-  python ${projectDir}/scripts/make_run_summary.py --reads_list_file ${reads_list}
+  python ${summary_script} --reads_list_file ${reads_list}
   """
 
 }

@@ -4,7 +4,7 @@ process MapReads_Bowtie {
   
   label 'mapping'
 
-  publishDir "${projectDir}/results/${batch}/${sample_id}/bams", mode: "copy", pattern: "*_merged_mrkdup.bam"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/bams", mode: "copy", pattern: "*_merged_mrkdup.bam"
   publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_mapping.log"
   publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_coverage_stats.txt"
   publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_marked_dup_metrics.txt" 
