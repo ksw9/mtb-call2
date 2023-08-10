@@ -62,57 +62,25 @@ profiles {
 
 process {
 
-    executor                    = "slurm"
+    container                   = "ksw9/mtb-call"
 
-    clusterOptions              = "-A walter --partition notchpeak -N 1 --time=10:00:00"
+    withLabel: local {
+
+    	executor		= "local"
         
-    errorStrategy               = "ignore"
-
-    withLabel: trimgalore {
-
-    	container               = "ksw9/mtb-call:trimgalore"
-
-    }
-
-    withLabel: kraken2 {
-
-        container               = "ksw9/mtb-call:kraken2"
-
-    }
-    
-    withLabel: mapping {
-
-        container               = "ksw9/mtb-call:mapping"
-
-    }
-    
-    withLabel: amr {
-
-        container               = "ksw9/mtb-call:amr"
-
-    }
-    
-    withLabel: tb_profiler {
-    
-    	container               = "ksw9/mtb-call:tbprofiler"
-
-        // errorStrategy set to "retry" to deal with random failures of TB-Profiler
-
         errorStrategy           = "retry"
         
         maxRetries              = 10
 
     }
 
-    withLabel: variantcalling {
+    withLabel: slurm {
 
-        container               = "ksw9/mtb-call:variantcalling"
+    	executor		= "slurm"
 
-    }
-
-    withLabel: makesummary {
-
-        container               = "ksw9/mtb-call:trimgalore"
+    	clusterOptions		= "-A owner-guest --partition kingspeak-guest -N 1 --time=4:00:00"
+        
+        errorStrategy           = "finish"
 
     }
 
@@ -120,12 +88,12 @@ process {
 
 params {
     
-    // Main files/directories
+	// Main files/directories
     // N.B. All paths are relative to resources_dir
 
-    resources_dir               = "/uufs/chpc.utah.edu/common/home/walter-group2/tb/mtb-call2/resources"
+    resources_dir               = "/uufs/chpc.utah.edu/common/home/walter-group1/tb/WalterPipeline/resources"
 
-    reads_list                  = "input/goig.tsv"
+    reads_list                 = "input/vitoria.tsv"
 
     kraken_database_path        = "kraken_db"
 
@@ -153,7 +121,7 @@ params {
 
     snpeff_datapath             = "snpEff/data"
 
-    snpeff_config		        = "snpEff/snpEff.config"
+    snpeff_config		= "snpEff/snpEff.config"
 
     // Main variables
 
@@ -174,7 +142,5 @@ params {
     nextseq                     = false
 
     nextseq_qual_threshold      = 20
-    
-    variants_only               = true
 
 }
