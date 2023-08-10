@@ -17,7 +17,7 @@ process MakeLowCoverageMask {
   samtools depth -a ${bam} > ${sample_id}_depth.txt
 
   # Create bed mask for low coverage sites
-  awk -v min_depth=${params.depth_threshold} '{ if (\$3 < min_depth) { print \$1"\t"\$2"\t"\$2+1"\t"\$1"_"\$2"_lowcoverage" } }' ${sample_id}_depth.txt | bgzip > ${sample_id}_low_coverage_mask.bed.gz
+  awk -v min_depth=${params.depth_threshold} '{ if (\$3 < min_depth) { print \$1"\t"\$2-1"\t"\$2"\t"\$1"_"\$2"_lowcoverage" } }' ${sample_id}_depth.txt | bgzip > ${sample_id}_low_coverage_mask.bed.gz
   """
 
 }
