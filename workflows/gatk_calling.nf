@@ -29,6 +29,9 @@ workflow GATK {
   // Channel for ppe masking bed file index required by "gatk VariantFiltration" in VariantsGATK
   bed_file_index = Channel.fromPath("${params.resources_dir}/${params.bed_index_path}")
 
+  // VCF header
+  vcf_header = Channel.fromPath("${params.resources_dir}/${params.vcf_header}")
+
   // Variant calling
   VariantsGATK(reference_fasta, reference_fasta_index, gatk_dictionary, bam_files)
 
@@ -44,6 +47,11 @@ workflow GATK {
 
   // ANNOTATE GATK VCF -------------------- //
 
-  AnnotateVCF("gatk", reference_fasta, VariantsGATK.out.gatk_vcf_filt)
+  // Channels for snpEff resources
+  Channel.fromPath("${params.resources_dir}/${params.snpeff_dir}")
+    .set{ snpeff_dir }
+
+  // Annotation
+  AnnotateVCF("gatk", snpeff_dir, bed_file, bed_file_index, vcf_header, VariantsGATK.out.gatk_vcf_filt)
 
 }

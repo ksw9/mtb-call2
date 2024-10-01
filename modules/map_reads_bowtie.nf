@@ -34,12 +34,24 @@ process MapReads_Bowtie {
   PU=\${flowcell}'.'\${barcode}'.'\${lane}
 
   # Alignment with Bowtie2
-  bowtie2 \
-  --threads \$SLURM_CPUS_ON_NODE \
-  -X 1100 -x ${params.bowtie_index_prefix} \
-  -1 ${read1} \
-  -2 ${read2} \
-  -S temp.sam
+  if [[ "${read2}" == "mock.kr.fastq" ]]
+  then
+
+    bowtie2 \
+    --threads \$SLURM_CPUS_ON_NODE \
+    -X 1100 -x ${params.bowtie_index_prefix} \
+    -U ${read1}
+    -S temp.sam
+
+  else
+
+    --threads \$SLURM_CPUS_ON_NODE \
+    -X 1100 -x ${params.bowtie_index_prefix} \
+    -1 ${read1} \
+    -2 ${read2} \
+    -S temp.sam
+
+  fi
 
   # Sort and convert to bam
   gatk SortSam \

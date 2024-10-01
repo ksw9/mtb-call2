@@ -27,7 +27,7 @@ workflow {
   Channel
   .fromPath("${params.resources_dir}/${params.reads_list}")
   .splitCsv(header: true, sep: '\t')
-  .map{row -> tuple(row.sample, row.fastq_1, row.fastq_2, row.batch)}
+  .map{row -> tuple(row.sample, file(row.fastq_1), file(row.fastq_2), row.batch)}
   .set{raw_reads}
 
   // TRIMGALORE --------------------------- //

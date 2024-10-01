@@ -37,10 +37,22 @@ process MapReads_BWA {
   fi
   
   # Mapping with BWA
-  bwa mem \
-  -t \$SLURM_CPUS_ON_NODE \
-  ${reference_fasta} \
-  ${read1} ${read2} > temp.sam
+  if [[ "${read2}" == "mock.kr.fastq" ]]
+  then
+
+    bwa mem \
+    -t \$SLURM_CPUS_ON_NODE \
+    ${reference_fasta} \
+    ${read1} > temp.sam
+
+  else
+
+    bwa mem \
+    -t \$SLURM_CPUS_ON_NODE \
+    ${reference_fasta} \
+    ${read1} ${read2} > temp.sam
+
+  fi
 
   # Sort and convert to bam
   gatk SortSam \
@@ -54,7 +66,7 @@ process MapReads_BWA {
   # Collect coverage stats with Picard
   picard CollectWgsMetrics \
   R=${reference_fasta} \
-  CAP=2000 \  
+  CAP=2000 \
   I=temp.bam \
   O=${sample_id}_coverage_stats.txt
 
