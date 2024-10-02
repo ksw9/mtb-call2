@@ -1,6 +1,6 @@
 # *M. tuberculosis* variant identification pipeline
 
-Pipeline for *M. tuberculosis* variant identification from short-read data for epidemiology and phylogenetics. Briefly, this pipeline takes raw short-read Illumina data, pre-processes reads (read adapter trimming and taxonomic filtering), maps reads to a provided reference genome, calls variants, and outputs consensus FASTA sequences for downstream applications. The pipeline is written in Nextflow, so modules are adaptable. User options allow for tailoring of the pipeline such as setting custom filters and choosing a reference genome. Users can [benchmark](benchmark.md) this pipeline with their chosen filters on simulated data and truth VCFs. 
+Pipeline for *M. tuberculosis* variant identification from paired-end or single short-read data for epidemiology and phylogenetics. Briefly, this pipeline takes raw short-read Illumina data, pre-processes reads (read adapter trimming and taxonomic filtering), maps reads to a provided reference genome, calls variants, and outputs consensus FASTA sequences for downstream applications. The pipeline is written in Nextflow, so modules are adaptable. User options allow for tailoring of the pipeline such as setting custom filters and choosing a reference genome. Users can [benchmark](benchmark.md) this pipeline with their chosen filters on simulated data and truth VCFs. 
 
 ## Installation & set-up
 
@@ -43,9 +43,14 @@ tar -xf k2_standard_08gb_20221209.tar.gz
 nextflow run main.nf -profile singularity # or docker
 ```
 
-2. Run the pipeline on user data. 
-  - Create a tab-delimited file with sample name, full path to FASTQ read 1, full path to FASTQ read 2, batch name, run name (format like data/reads_list.tsv). 
-  - Update the nextflow.config so that the reads_list parameter is now defined by the new list. 
+2. Create an input file of FASTQ reads.
+  - For paired-end reads: tab-delimited file includes sample name, full path to FASTQ read 1, full path to FASTQ read 2, batch name, run name (format like data/reads_list.tsv).
+  - For single-end reads: tab-delimited file includes  sample name, full path to FASTQ read 1, "mock.fastq", batch name, run name (format like data/reads_list.tsv). "mock.fastq" is a placeholder and allows the user to mix paired-end and single-end reads in the same file.
+
+3. Run pipleine.
+  - Direct the pipeline to the input reads file you can:
+    - (a) update the nextflow.config file  so that the reads_list parameter is now defined by the new           list.
+    - (b) pass the reads_list as an argument to the nextflow run command (i.e. --reads_list <input_filename.tsv>)
   -update the scripts/submit_mtb_pipeline.sh job submission script with job name, email, email preferences. 
   - Run the pipeline.
 ```
