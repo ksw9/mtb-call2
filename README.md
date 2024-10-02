@@ -43,7 +43,7 @@ tar -xf k2_standard_08gb_20221209.tar.gz
 nextflow run main.nf -profile singularity # or docker
 ```
 
-2. Create an input file of FASTQ reads. See the [example file] (https://github.com/ksw9/mtb-call2/blob/main/example_input.tsv).
+2. Create an input file of FASTQ reads. See the [example file](https://github.com/ksw9/mtb-call2/blob/main/example_input.tsv).
   - For paired-end reads: tab-delimited file includes sample name, full path to FASTQ read 1, full path to FASTQ read 2, batch name, run name (format like data/reads_list.tsv).
   - For single-end reads: tab-delimited file includes  sample name, full path to FASTQ read 1, "mock.fastq", batch name, run name (format like data/reads_list.tsv). "mock.fastq" is a placeholder and allows the user to mix paired-end and single-end reads in the same file.
 
