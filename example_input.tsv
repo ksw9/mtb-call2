@@ -1,0 +1,5 @@
+sample	fastq_1	fastq_2	batch
+DRR184615_paired	lineage_4_data/DRR184615_1.fastq.gz	lineage_4_data/DRR184615_2.fastq.gz	lineage_4_data
+DRR184630_paired	lineage_4_data/DRR184630_1.fastq.gz	lineage_4_data/DRR184630_2.fastq.gz	lineage_4_data
+DRR184615_single	lineage_4_data/DRR184615_1.fastq.gz	mock.fastq	lineage_4_data
+DRR184630_single	lineage_4_data/DRR184630_1.fastq.gz	mock.fastq	lineage_4_data
