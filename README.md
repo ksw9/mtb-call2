@@ -51,7 +51,7 @@ nextflow run main.nf -profile singularity # or docker
   - Direct the pipeline to the input reads file you can:
     - (a) update the nextflow.config file  so that the reads_list parameter is now defined by the new           list.
     - (b) pass the reads_list as an argument to the nextflow run command (i.e. --reads_list <input_filename.tsv>)
-  -update the scripts/submit_mtb_pipeline.sh job submission script with job name, email, email preferences. 
+  - Update the scripts/submit_mtb_pipeline.sh job submission script with job name, email, email preferences. 
   - Run the pipeline.
 ```
 nextflow run main.nf -profile singularity # or docker
