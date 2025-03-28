@@ -1,18 +1,21 @@
 
 // ----------------Workflow---------------- //
 
-include { VariantsGATK } from '../modules/variants_gatk.nf'
-include { ConvertVCF } from '../modules/vcf2fasta.nf'
-include { AnnotateVCF } from '../modules/annotate_vcf.nf'
+include { VariantsGATK } from '../../modules/variant_calling/variants_gatk.nf'
+include { FilterVCF } from '../../modules/variant_calling/filter_vcf.nf'
+include { ConvertVCF } from '../../modules/variant_calling/vcf2fasta.nf'
+include { AnnotateVCF } from '../../modules/variant_calling/annotate_vcf.nf'
 
 workflow GATK {
 
   take:
   bam_files
-  low_coverage_mask
 	
   main:
-  // GATK VARIANT CALLER ------------------ //
+  // CREATE RESOURCES CHANNELS ------------ //
+
+  // Creating channel for filter_vcf.py script
+  filtering_script = Channel.fromPath("${projectDir}/scripts/filter_vcf.py")
 
   // Channel for genome reference fasta (absolute path from params won't do since the fasta index has to be in same dir for GATK)
   reference_fasta = Channel.fromPath("${params.resources_dir}/${params.reference_fasta_path}")
@@ -32,15 +35,27 @@ workflow GATK {
   // VCF header
   vcf_header = Channel.fromPath("${params.resources_dir}/${params.vcf_header}")
 
+  // GATK VARIANT CALLER ------------------ //
+
   // Variant calling
   VariantsGATK(reference_fasta, reference_fasta_index, gatk_dictionary, bam_files)
 
+  // Filtering
+  FilterVCF(filtering_script, VariantsGATK.out.gatk_vcf_unfiltered)
+
   // CONVERTING VCF TO FASTA -------------- //
 
-  // Join VariantsGATK.out.gatk_vcf_filt and low_coverage mask
-  VariantsGATK.out.gatk_vcf_filt
-  .join(low_coverage_mask, by: [0,2], remainder: false)
-  .set{ vcf_to_fasta_input }
+  // Define input
+  if (params.use_filtered_vcf_for_fasta) {
+
+    vcf_to_fasta_input = FilterVCF.out.filtered_vcf
+
+  }
+  else {
+
+    vcf_to_fasta_input = VariantsGATK.out.gatk_vcf_unfiltered
+
+  }
 
   // Convert vcf to fasta
   ConvertVCF("gatk", reference_fasta, vcf_to_fasta_input, bed_file, bed_file_index)
@@ -49,9 +64,9 @@ workflow GATK {
 
   // Channels for snpEff resources
   Channel.fromPath("${params.resources_dir}/${params.snpeff_dir}")
-    .set{ snpeff_dir }
+  .set{ snpeff_dir }
 
   // Annotation
-  AnnotateVCF("gatk", snpeff_dir, bed_file, bed_file_index, vcf_header, VariantsGATK.out.gatk_vcf_filt)
+  AnnotateVCF("gatk", snpeff_dir, bed_file, bed_file_index, vcf_header, FilterVCF.out.filtered_vcf)
 
 }

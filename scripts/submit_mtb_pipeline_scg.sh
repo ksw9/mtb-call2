@@ -18,6 +18,6 @@ export NXF_SINGULARITY_CACHEDIR=$WORKDIR/images
 
 echo "Job started at $(date)"
 cd $WORKDIR
-nextflow run main.nf -profile singularity
+nextflow run main.nf -profile singularity,variant_calling
 cd $HOME
 echo "Job ended at $(date)"

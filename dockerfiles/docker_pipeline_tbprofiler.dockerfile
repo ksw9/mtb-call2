@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:4.12.0
+FROM continuumio/miniconda3:25.1.1-2
 
 ### UPDATING CONDA ------------------------- ###
 
@@ -16,12 +16,13 @@ RUN conda config --add channels conda-forge
 RUN conda install -y mamba
 
 # Installing packages
-# N.B. have to add weasyprint and specify tb-profiler=4.4.2 or the version automatically installed is 2.8
 RUN mamba install -y \
     sambamba \
-    tb-profiler=4.4.2 \
-    weasyprint && \
+    tb-profiler=6.6.3 && \
     conda clean -afty
+
+# Update tb-profiler
+RUN tb-profiler update_tbdb
 
 ### SETTING WORKING ENVIRONMENT ------------ ###
 

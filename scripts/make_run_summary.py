@@ -29,9 +29,6 @@ def parseKraken2Report(report_name):
 ### ---------------------------------------- ###
 
 def parseMappingReport(report_name):
-    
-
-    report = open(report_name).read().split('\n')
   
     report = open(report_name).read().split('\n')
 

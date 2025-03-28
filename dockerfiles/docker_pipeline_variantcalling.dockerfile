@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:4.12.0
+FROM continuumio/miniconda3:25.1.1-2
 
 ### UPDATING CONDA ------------------------- ###
 
@@ -17,15 +17,15 @@ RUN conda install -y mamba
 
 # Installing packages
 RUN mamba install -y \
-    bcftools=1.17 \
-    gatk4=4.3.0.0 \
+    bcftools=1.21 \
+    gatk4=4.6.1.0 \
     lofreq=2.1.5 \
     mummer=3.23 \
     samtools \
     tabix=1.11 && \
     conda clean -afty
 
-RUN mamba install --force-reinstall -y java-jdk # Needed to fix "java: symbol lookup error: java: undefined symbol: JLI_StringDup" error
+#RUN mamba install --force-reinstall -y java-jdk # Needed to fix "java: symbol lookup error: java: undefined symbol: JLI_StringDup" error
 
 ### SETTING WORKING ENVIRONMENT ------------ ###
 
