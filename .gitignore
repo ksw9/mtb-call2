@@ -1,4 +1,3 @@
-modules
 resources/bowtie2_index
 resources/H37Rv*
 resources/bwa_index
@@ -10,6 +9,6 @@ results
 test
 test_data
 work
-workflows
 .nextflow*
 kwalter_singularity.sif
+.DS_Store
