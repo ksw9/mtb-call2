@@ -212,13 +212,17 @@ def filter_vars(cols, data, vf):
             
             col_index = cols.index(p)
             
-            try:
-                
-                vars_vals = [float(d[col_index]) for d in data]
+            vars_vals = []
             
-            except:
+            for d in data:
                 
-                vars_vals = [d[col_index] for d in data]
+                try:
+                    
+                    vars_vals.append(float(d[col_index]))
+                
+                except:
+                    
+                    vars_vals.append(d[col_index] if o in ['==', '!='] else 0)
             
             p_filter = [(vv == v) if o == '=='
                         else (vv != v) if o == '!='
