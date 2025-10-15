@@ -14,7 +14,7 @@ process VariantsGATK {
 
   output:
   //tuple val(sample_id), path("${sample_id}_gatk.g.vcf.gz"), val(batch), emit: gatk_gvcf
-  tuple val(sample_id), path("${sample_id}_gatk_unfilt.vcf.gz"), val(batch), emit: gatk_vcf_unfiltered
+  tuple val(sample_id), path("${sample_id}_gatk_unfilt_norm.vcf.gz"), val(batch), emit: gatk_vcf_unfiltered
 
   """
   # Indexing bam
@@ -40,6 +40,14 @@ process VariantsGATK {
     -ploidy ${params.ploidy} \
     --include-non-variant-sites true \
     --output ${sample_id}_gatk_unfilt.vcf.gz
+
+    # vcf normalization
+    bcftools norm \
+    -f ${reference} \
+    -m -both \
+    -O z \
+    -o ${sample_id}_gatk_unfilt_norm.vcf.gz \
+    ${sample_id}_gatk_unfilt.vcf.gz
   
   else
 
@@ -60,6 +68,14 @@ process VariantsGATK {
     -ploidy ${params.ploidy} \
     --include-non-variant-sites false \
     --output ${sample_id}_gatk_unfilt.vcf.gz
+
+    # vcf normalization
+    bcftools norm \
+    -f ${reference} \
+    -m -both \
+    -O z \
+    -o ${sample_id}_gatk_unfilt_norm.vcf.gz \
+    ${sample_id}_gatk_unfilt.vcf.gz
   
   fi
   """
