@@ -48,7 +48,7 @@ workflow GENOMERESOURCES {
 
   // Merge channels
   DownloadRefs.out.fasta
-  .join(DownloadRefs.out.gtf, by: 0, remainder: false)
+  .join(DownloadRefs.out.gff, by: 0, remainder: false)
   .set{ fasta_and_gtf }
 
   SnpeffInputPrep(fasta_and_gtf)
