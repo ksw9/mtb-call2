@@ -7,7 +7,7 @@ process SnpeffPrep {
   publishDir "${params.resources_dir}", mode: "copy", pattern: "snpEff"
 
   input:
-  tuple val(), path(gff)
+  tuple val(strain_name), path(gff)
 
   output:
   path "snpEff", emit: snpeff
@@ -19,7 +19,7 @@ process SnpeffPrep {
   # Unzip file
   unzip snpEff_latest_core.zip
 
-  ### Building annotations for C. immitis
+  ### Building annotations
   # Step 1. Configure a new genome
   echo "" >> snpEff/snpEff.config
   echo "# Mycobacterium tuberculosis genome, version ${params.assembly_identifier}" >> snpEff/snpEff.config
