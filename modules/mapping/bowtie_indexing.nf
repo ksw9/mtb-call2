@@ -4,16 +4,16 @@ process BowtieIndex {
 
   label 'mapping'
 
-  publishDir "${params.resources_dir}/bowtie2_index", mode: "copy", pattern: "*.{amb,ann,bwt,pac,sa}"
+  publishDir "${params.resources_dir}/bowtie2_index", mode: "copy", pattern: "*.bt2"
 
   input:
   tuple val(strain_name), path(fasta), path(fasta_index)
 
   output:
-  tuple val("${strain_name}"), path("*.amb"), path("*.ann"), path("*.bwt"), path("*.pac"), path("*.sa"), emit: bowtie_index
+  tuple val("${strain_name}"), path("*.bt2"), emit: bowtie_index
 
   """
-  bowtie2-build ${fasta} ${params.bowtie_index_prefix}
+  bowtie2-build -f ${fasta} ${params.bowtie_index_prefix}
   """
 
 }
