@@ -56,7 +56,7 @@ process GenerateKraken2DB {
   done
 
   # Build database
-  kraken2-build --build --threads ${SLURM_CPUS_ON_NODE} --db \${db_dir}
+  kraken2-build --build --threads \${SLURM_CPUS_ON_NODE} --db \${db_dir}
 
   # Clean up
   kraken2-build --clean --db \${db_dir}
