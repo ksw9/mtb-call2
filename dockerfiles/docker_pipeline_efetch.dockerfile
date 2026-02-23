@@ -17,7 +17,13 @@ RUN conda install -y mamba
 
 # Installing packages
 RUN mamba install -y \
-    entrez-direct=22.4 && \
+    curl \
+    entrez-direct=22.4 \
+    gzip \
+    openjdk \
+    tabix=1.11 \
+    unzip \
+    wget && \
     conda clean -afty
 
 ### SETTING WORKING ENVIRONMENT ------------ ###

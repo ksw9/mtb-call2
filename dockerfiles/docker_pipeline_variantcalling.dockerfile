@@ -25,8 +25,6 @@ RUN mamba install -y \
     tabix=1.11 && \
     conda clean -afty
 
-#RUN mamba install --force-reinstall -y java-jdk # Needed to fix "java: symbol lookup error: java: undefined symbol: JLI_StringDup" error
-
 ### SETTING WORKING ENVIRONMENT ------------ ###
 
 # Set workdir to /home/

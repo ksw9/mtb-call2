@@ -9,7 +9,7 @@ process ConvertVCF {
   input:
   each variant_caller
   each path(reference)
-  tuple val(sample_id), path(vcf), val(batch)
+  tuple val(sample_id), val(batch), path(vcf), path(index)
   each path(bed_file)
   each path(bed_index)
 
@@ -18,9 +18,6 @@ process ConvertVCF {
   path "${sample_id}_${variant_caller}_PPEmask.fa", emit: masked_fasta
 
   """
-  # Index vcf
-  tabix -p vcf ${vcf}
-
   # N.B. The vcf files come from individual samples, so no need to specify --sample in bcftools consensus (also, LoFreq does not store sample name info in the vcf).
 
   if [ ${params.fasta_vcf_sites_only} == false ]

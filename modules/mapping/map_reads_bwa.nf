@@ -4,7 +4,8 @@ process MapReads_BWA {
   
   label 'mapping'
 
-  publishDir "${projectDir}/results/${batch}/${sample_id}/bams", mode: "copy", pattern: "*_merged_mrkdup.bam"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/bams", mode: "copy", pattern: "*_merged_mrkdup.bam"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/bams", mode: "copy", pattern: "*_merged_mrkdup.bam.bai"
   publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_mapping.log"
   publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_coverage_stats.txt"
   publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_marked_dup_metrics.txt"
@@ -12,10 +13,10 @@ process MapReads_BWA {
   input:
   each path(reference_fasta)
   path(bwa_index)
-  tuple val(sample_id), path(read1), path(read2), val(batch)
+  tuple val(sample_id), val(batch), path(read1), path(read2)
 
   output:
-  tuple val(sample_id), path("${sample_id}_merged_mrkdup.bam"), val(batch), emit: bam_files
+  tuple val(sample_id), val(batch), path("${sample_id}_merged_mrkdup.bam"), path("${sample_id}_merged_mrkdup.bam.bai"), emit: bam_files
   path "${sample_id}_mapping.log", emit: mapping_reports
   path "${sample_id}_coverage_stats.txt", emit: coverage_stats
   path "${sample_id}_marked_dup_metrics.txt", emit: dup_metrics
@@ -84,8 +85,11 @@ process MapReads_BWA {
   gatk MarkDuplicates \
   -I temp_rg.bam \
   -O ${sample_id}_merged_mrkdup.bam  \
-  -M ${sample_id}_marked_dup_metrics.txt  
-      
+  -M ${sample_id}_marked_dup_metrics.txt
+
+  # Indexing bam
+  samtools index ${sample_id}_merged_mrkdup.bam
+
   # Mark duplicates with Spark (also sorts BAM) & produce library complexity metrics
   # Need to use Java 7 or Java 11 (https://gatk.broadinstitute.org/hc/en-us/community/posts/4417665825307-java-lang-reflect-InaccessibleObjectException-Unable-to-make-field-transient-java-lang-Object-java-util-ArrayList-elementData-accessible-module-java-base-does-not-opens-java-util-to-unnamed-module-3bf44630)
   #gatk MarkDuplicatesSpark \

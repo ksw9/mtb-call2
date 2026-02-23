@@ -9,11 +9,11 @@ process Kraken {
 
   input:
   path(kraken_db)
-  tuple val(sample_id), path(read1), path(read2), val(batch)
+  tuple val(sample_id), val(batch), path(read1), path(read2)
 
   output:
   path "*_kraken.report", emit: kraken_reports
-  tuple val(sample_id), path("{${sample_id}_kr_1.fq.gz,${sample_id}_kr.fq.gz}"), path("{${sample_id}_kr_2.fq.gz,mock.kr.fastq}"), val(batch), emit: kraken_filtered_files
+  tuple val(sample_id), val(batch), path("{${sample_id}_kr_1.fq.gz,${sample_id}_kr.fq.gz}"), path("{${sample_id}_kr_2.fq.gz,mock.kr.fastq}"), emit: kraken_filtered_files
 
   """
   if [[ "${read2}" == "mock.trim.fastq" ]]

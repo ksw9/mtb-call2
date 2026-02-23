@@ -7,7 +7,7 @@ process SummarizeRun {
   publishDir "${projectDir}/results", mode: "copy", pattern: "*_run_summary_*.tsv"
 
   input:
-  path summary_script
+  path scripts_dir
   path reads_list
   path trimming_reports
   path kraken_reports
@@ -20,7 +20,7 @@ process SummarizeRun {
   path "*_run_summary_*.tsv"
 
   """
-  python ${summary_script} --reads_list_file ${reads_list}
+  python ${scripts_dir}/make_run_summary.py --reads_list_file ${reads_list}
   """
 
 }

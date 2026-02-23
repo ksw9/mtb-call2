@@ -8,7 +8,7 @@ process TbProfiler {
   publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*.errlog.txt"
 
   input:
-  tuple val(sample_id), path(bam), val(batch)
+  tuple val(sample_id), val(batch), path(bam), path(bai)
 
   output:
   path "${sample_id}_lineageSpo_gatk.csv", optional: true, emit: tbprofiler_reports

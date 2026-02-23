@@ -9,12 +9,12 @@ process TrimFastQ {
   publishDir "${projectDir}/results/${batch}/${sample_id}/trim", mode: "copy", pattern: "*_trimming_report.txt"
 
   input:
-  tuple val(sample_id), path(read1), path(read2), val(batch)
+  tuple val(sample_id), val(batch), path(read1), path(read2)
 
   output:
   path "*_fastqc.{html,zip}"
   path "*_trimming_report.txt", emit: trimming_reports
-  tuple val(sample_id), path("{${sample_id}_val_1.fq.gz,${sample_id}_trimmed.fq.gz}"), path("{${sample_id}_val_2.fq.gz,mock.trim.fastq}"), val(batch), emit: trimmed_fastq_files
+  tuple val(sample_id), val(batch), path("{${sample_id}_val_1.fq.gz,${sample_id}_trimmed.fq.gz}"), path("{${sample_id}_val_2.fq.gz,mock.trim.fastq}"), emit: trimmed_fastq_files
 
   """
   # Trim adapters and short reads, for all platforms but NextSeq

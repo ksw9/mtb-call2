@@ -9,16 +9,13 @@ process VariantsLoFreq {
   input:
   each path(reference)
   each path(reference_index)
-  tuple val(sample_id), path(bam), val(batch)
+  tuple val(sample_id), val(batch), path(bam), path(bai)
 
   output:
-  tuple val(sample_id), path("${sample_id}_lofreq_unfilt.vcf.gz"), val(batch), emit: lofreq_unfilt_vcf
-  tuple val(sample_id), path("${sample_id}_lofreq_filt.vcf.gz"), val(batch), emit: lofreq_filt_vcf
+  tuple val(sample_id), val(batch), path("${sample_id}_lofreq_unfilt.vcf.gz"), emit: lofreq_vcf_unfiltered
+  tuple val(sample_id), val(batch), path("${sample_id}_lofreq_filt.vcf.gz"), emit: lofreq_vcf_filtered
 
   """
-  # Indexing bam
-  samtools index ${bam}
-
   # Call variants with LoFreq, no filter
   lofreq call-parallel --call-indels --pp-threads \$SLURM_CPUS_ON_NODE --no-default-filter -f ${reference} -o ${sample_id}_lofreq_unfilt_tmp.vcf ${bam}
 

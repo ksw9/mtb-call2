@@ -10,16 +10,13 @@ process VariantsGATK {
   each path(reference)
   each path(reference_index)
   each path(dictionary)
-  tuple val(sample_id), path(bam), val(batch)
+  tuple val(sample_id), val(batch), path(bam), path(bai)
 
   output:
-  //tuple val(sample_id), path("${sample_id}_gatk.g.vcf.gz"), val(batch), emit: gatk_gvcf
-  tuple val(sample_id), path("${sample_id}_gatk_unfilt_norm.vcf.gz"), val(batch), emit: gatk_vcf_unfiltered
+  tuple val(sample_id), val(batch), path("${sample_id}_gatk.g.vcf.gz"), emit: gatk_gvcf
+  tuple val(sample_id), val(batch), path("${sample_id}_gatk_unfilt_norm.vcf.gz"), emit: gatk_vcf_unfiltered
 
   """
-  # Indexing bam
-  samtools index ${bam}
-
   if [ ${params.vcf_variants_only} == false ]
   then 
   
