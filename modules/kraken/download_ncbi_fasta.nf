@@ -11,6 +11,7 @@ process DownloadNCBI {
   output:
   path "*.fna", optional: true, emit: fasta
 
+  script:
   """
   # Clean bad chars from file name
   corrected_target_file=\$(echo "${target_file}" | sed "s/#/_/g" | sed "s/(/_/g" | sed "s/)/_/g" | sed "s/, /_/g" | sed "s/ /_/g" | sed "s/\\//_/g" | sed "s/+/_/g")

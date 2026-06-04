@@ -63,8 +63,8 @@ module load nextflow
 3. Update the "**nextflow.config**" file:
 
   - Update the "**resources_dir**" parameter, e.g.\
-    *resources_dir = "/full/path/mtb-call2/resources"*\
-    N.B. Use the full path\
+    *resources_dir = "relative/path/to/mtb-call2/resources"*\
+    N.B. The path must be relative to the pipeline directory\
     N.B. This directory will be created (and populated) when you run the pipeline in "**download_refs**" mode (see point 4)
 
   - Update the "**clusterOptions**" parameter, e.g.\
@@ -155,6 +155,10 @@ There are several user options which can be modified on the command line or in t
 
 - **mapper**: defines mapping algorithm to be used (**bwa** or **bowtie2**).\
   (Default = "bwa")
+
+- **filter_bam**: set to **true** to filter BAM files before variant calling and downstream analyses.\
+  Removes unmapped, secondary, and supplementary alignments.\
+  (Default = true)
 
 - **run_lofreq**: set to **true** to run LoFreq as well as GATK, or **false** to run GATK only.\
   (Default = true)

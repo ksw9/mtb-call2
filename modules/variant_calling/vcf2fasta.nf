@@ -4,7 +4,7 @@ process ConvertVCF {
 
   label 'variantcalling'
 
-  publishDir "${projectDir}/results/${batch}/${sample_id}/fasta", mode: "copy", pattern: "*.fa"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/fasta", mode: "copy", pattern: "*.fa"
 
   input:
   each variant_caller
@@ -14,9 +14,10 @@ process ConvertVCF {
   each path(bed_index)
 
   output:
-  path "${sample_id}_${variant_caller}.fa", emit: unmasked_fasta
-  path "${sample_id}_${variant_caller}_PPEmask.fa", emit: masked_fasta
+  tuple val(sample_id), val(batch), path("${sample_id}_${variant_caller}.fa"), emit: unmasked_fasta
+  tuple val(sample_id), val(batch), path("${sample_id}_${variant_caller}_PPEmask.fa"), emit: masked_fasta
 
+  script:
   """
   # N.B. The vcf files come from individual samples, so no need to specify --sample in bcftools consensus (also, LoFreq does not store sample name info in the vcf).
 

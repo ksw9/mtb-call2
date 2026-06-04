@@ -10,6 +10,7 @@ process SnpeffInputPrep {
   output:
   tuple val("${strain_name}"), path("${strain_name}_genes.gff"), emit: snpeff_input
 
+  script:
   """
   # Add fasta sequence to gff
   cp ${gff} ${strain_name}_genes.gff

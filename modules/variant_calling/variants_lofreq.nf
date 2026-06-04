@@ -4,7 +4,7 @@ process VariantsLoFreq {
   
   label 'variantcalling'
 
-  publishDir "${projectDir}/results/${batch}/${sample_id}/vars", mode: "copy", pattern: "*{_lofreq_unfilt,_lofreq_filt}.vcf.gz"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/vars", mode: "copy", pattern: "*{_lofreq_unfilt,_lofreq_filt}.vcf.gz"
 
   input:
   each path(reference)
@@ -15,6 +15,7 @@ process VariantsLoFreq {
   tuple val(sample_id), val(batch), path("${sample_id}_lofreq_unfilt.vcf.gz"), emit: lofreq_vcf_unfiltered
   tuple val(sample_id), val(batch), path("${sample_id}_lofreq_filt.vcf.gz"), emit: lofreq_vcf_filtered
 
+  script:
   """
   # Call variants with LoFreq, no filter
   lofreq call-parallel --call-indels --pp-threads \$SLURM_CPUS_ON_NODE --no-default-filter -f ${reference} -o ${sample_id}_lofreq_unfilt_tmp.vcf ${bam}

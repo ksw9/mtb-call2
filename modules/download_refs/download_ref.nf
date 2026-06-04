@@ -4,7 +4,7 @@ process DownloadRefs {
 
   label 'download_refs'
 
-  publishDir "${params.resources_dir}/refs", mode: "copy", pattern: "*.fasta"
+  //publishDir "${params.resources_dir}/refs", mode: "copy", pattern: "*.fasta"
 
   input:
   val assembly_identifier
@@ -14,6 +14,7 @@ process DownloadRefs {
   tuple val("${strain_name}"), path("${strain_name}.fasta"), emit: fasta
   tuple val("${strain_name}"), path("${strain_name}.gff"), emit: gff
 
+  script:
   """
   # Download reference fasta and GFF
   curl -OJX GET "https://api.ncbi.nlm.nih.gov/datasets/v2alpha/genome/accession/${assembly_identifier}/download?include_annotation_type=GENOME_FASTA,GENOME_GFF&filename=${assembly_identifier}.zip" -H "Accept: application/zip"

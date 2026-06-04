@@ -9,6 +9,7 @@ process DownloadEuPath {
   output:
   path "${db}", emit: fasta_dir
 
+  script:
   """
   # Download EuPathDB46 seqid2taxid.map
   wget -w 1 --tries 20 --retry-connrefused --retry-on-host-error ftp://ftp.ccb.jhu.edu/pub/data/EuPathDB46/seqid2taxid.map

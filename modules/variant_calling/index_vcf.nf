@@ -10,6 +10,7 @@ process IndexVCF {
   output:
   tuple val(sample_id), val(batch), path("*.tbi"), emit: vcf_index
 
+  script:
   """
   # Index vcf
   tabix -p vcf ${vcf}

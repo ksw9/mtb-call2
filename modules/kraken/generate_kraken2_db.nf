@@ -3,7 +3,7 @@ process GenerateKraken2DB {
 	// Build a Kraken2 database with bacteria, fungi, viral, human complete genomes, and EuPathDB46 (eukaryotic pathogen genomes)
   label 'kraken2'
 
-  publishDir "${params.resources_dir}/kraken_db", mode: "copy", pattern: "standard_plus_eupath46"
+  //publishDir "${params.resources_dir}/kraken_db", mode: "copy", pattern: "standard_plus_eupath46"
 
   input:
   path ncbi_fasta
@@ -12,6 +12,7 @@ process GenerateKraken2DB {
   output:
   path "standard_plus_eupath46", emit: kraken_db
 
+  script:
   """
   # Make folder for database
   db_dir=standard_plus_eupath46

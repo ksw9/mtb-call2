@@ -4,17 +4,18 @@ process TbProfiler {
   
   label 'tb_profiler'
 
-  publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_lineageSpo_gatk.{csv,json}"
-  publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*.errlog.txt"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_lineageSpo_gatk.{csv,json}"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*.errlog.txt"
 
   input:
   tuple val(sample_id), val(batch), path(bam), path(bai)
 
   output:
-  path "${sample_id}_lineageSpo_gatk.csv", optional: true, emit: tbprofiler_reports
-  path "${sample_id}_lineageSpo_gatk.json", optional: true
-  path "*.errlog.txt", optional: true
+  tuple val(sample_id), val(batch), path("${sample_id}_lineageSpo_gatk.csv"), optional: true, emit: tbprofiler_reports
+  tuple val(sample_id), val(batch), path("${sample_id}_lineageSpo_gatk.json"), optional: true, emit: tbprofiler_reports_json
+  tuple val(sample_id), val(batch), path("*.errlog.txt"), optional: true, emit: tbprofiler_errlog
 
+  script:
   """
   # Rename Chromosome for compatibility with Tb-profiler
   sambamba view -h -t \$SLURM_CPUS_ON_NODE ${bam} | sed 's/NC_000962.3/Chromosome/g' | sambamba view -t \$SLURM_CPUS_ON_NODE -S -f bam -o tmp_renamed.bam /dev/stdin

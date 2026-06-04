@@ -48,4 +48,12 @@ workflow LOFREQ {
   // Annotation with bcftools
   AnnotateVCFBCFtools("lofreq", bed_file, bed_file_index, vcf_header, bcftools_input)
 
+  emit:
+  lofreq_vcf_unfiltered = VariantsLoFreq.out.lofreq_vcf_unfiltered
+  lofreq_vcf_filtered = VariantsLoFreq.out.lofreq_vcf_filtered
+  lofreq_vcf_filtered_index = IndexFilteredVCF.out.vcf_index
+  lofreq_vcf_snpeff_ann = AnnotateVCFsnpEff.out.vcf_snpeff_ann
+  lofreq_vcf_snpeff_ann_index = IndexAnnotatedVCF.out.vcf_index
+  lofreq_vcf_bcftools_ann = AnnotateVCFBCFtools.out.vcf_bcftools_ann
+
 }

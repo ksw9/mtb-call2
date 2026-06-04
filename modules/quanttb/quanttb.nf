@@ -4,14 +4,15 @@ process QuantTB {
   
   label 'slurm'
 
-  publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_quanttb.csv"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_quanttb.csv"
 
   input:
-  tuple val(sample_id), path(read1), path(read2), val(batch)
+  tuple val(sample_id), val(batch), path(read1), path(read2)
 
   output:
-  path "${sample_id}_quanttb.csv"
+  tuple val(sample_id), val(batch), path("${sample_id}_quanttb.csv"), emit: quantb_report
 
+  script:
   """
   # Detect evidence of mixed infections from FASTQ
   quanttb quant -f ${read1} ${read2} -abres -resout -o ${sample_id}_quanttb.csv

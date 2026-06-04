@@ -3,11 +3,10 @@ process GetNCBILinks {
   // Get NCBI download links for bacteria, fungi, viral, human complete genomes
   label 'kraken2'
 
-  input:
-
   output:
   path "ftp_links.tsv", emit: ftp_links
 
+  script:
   """
   # Init output file
   touch ftp_links.tsv

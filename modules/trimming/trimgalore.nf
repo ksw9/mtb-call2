@@ -5,17 +5,18 @@ process TrimFastQ {
   label 'trimgalore'
 
   //publishDir "${projectDir}/results/${batch}/${sample_id}/trim", mode: "copy", pattern: "*_val_{1,2}.fq.gz"
-  publishDir "${projectDir}/results/${batch}/${sample_id}/trim", mode: "copy", pattern: "*_fastqc.{html,zip}"
-  publishDir "${projectDir}/results/${batch}/${sample_id}/trim", mode: "copy", pattern: "*_trimming_report.txt"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/trim", mode: "copy", pattern: "*_fastqc.{html,zip}"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/trim", mode: "copy", pattern: "*_trimming_report.txt"
 
   input:
   tuple val(sample_id), val(batch), path(read1), path(read2)
 
   output:
-  path "*_fastqc.{html,zip}"
-  path "*_trimming_report.txt", emit: trimming_reports
+  tuple val(sample_id), val(batch), path("*_fastqc.{html,zip}"), emit: fastqc_reports
+  tuple val(sample_id), val(batch), path("*_trimming_report.txt"), emit: trimming_reports
   tuple val(sample_id), val(batch), path("{${sample_id}_val_1.fq.gz,${sample_id}_trimmed.fq.gz}"), path("{${sample_id}_val_2.fq.gz,mock.trim.fastq}"), emit: trimmed_fastq_files
 
+  script:
   """
   # Trim adapters and short reads, for all platforms but NextSeq
   if [[ "${read2}" == "mock.fastq" ]]

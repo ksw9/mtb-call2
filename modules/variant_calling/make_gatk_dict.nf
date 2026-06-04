@@ -4,7 +4,7 @@ process MakeGatkDict {
 
   label 'variantcalling'
 
-  publishDir "${params.resources_dir}/${species}_gatk_dictionary", mode: "copy", pattern: "*.dict"
+  //publishDir "${params.resources_dir}/${species}_gatk_dictionary", mode: "copy", pattern: "*.dict"
 
   input:
   tuple val(species), path(fasta), path(fasta_index)
@@ -12,6 +12,7 @@ process MakeGatkDict {
   output:
   tuple val("${species}"), path("*.dict"), emit: gatk_dictionary
 
+  script:
   """
   gatk CreateSequenceDictionary -R ${fasta}
   """

@@ -6,9 +6,9 @@ process MapReads_BWA {
 
   //publishDir "${projectDir}/results/${batch}/${sample_id}/bams", mode: "copy", pattern: "*_merged_mrkdup.bam"
   //publishDir "${projectDir}/results/${batch}/${sample_id}/bams", mode: "copy", pattern: "*_merged_mrkdup.bam.bai"
-  publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_mapping.log"
-  publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_coverage_stats.txt"
-  publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_marked_dup_metrics.txt"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_mapping.log"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_coverage_stats.txt"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_marked_dup_metrics.txt"
 
   input:
   each path(reference_fasta)
@@ -17,10 +17,11 @@ process MapReads_BWA {
 
   output:
   tuple val(sample_id), val(batch), path("${sample_id}_merged_mrkdup.bam"), path("${sample_id}_merged_mrkdup.bam.bai"), emit: bam_files
-  path "${sample_id}_mapping.log", emit: mapping_reports
-  path "${sample_id}_coverage_stats.txt", emit: coverage_stats
-  path "${sample_id}_marked_dup_metrics.txt", emit: dup_metrics
+  tuple val(sample_id), val(batch), path("${sample_id}_mapping.log"), emit: mapping_reports
+  tuple val(sample_id), val(batch), path("${sample_id}_coverage_stats.txt"), emit: coverage_stats
+  tuple val(sample_id), val(batch), path("${sample_id}_marked_dup_metrics.txt"), emit: dup_metrics
 
+  script:
   """
   # Get machine id_lane from SRA read identifier (old Illumina fastq format)
   read_name=\$(zcat ${read1} | head -n 1)

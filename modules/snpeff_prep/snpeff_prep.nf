@@ -4,7 +4,7 @@ process SnpeffPrep {
 
   label 'download_refs'
 
-  publishDir "${params.resources_dir}", mode: "copy", pattern: "snpEff"
+  //publishDir "${params.resources_dir}", mode: "copy", pattern: "snpEff"
 
   input:
   tuple val(strain_name), path(gff)
@@ -12,6 +12,7 @@ process SnpeffPrep {
   output:
   path "snpEff", emit: snpeff
 
+  script:
   """
   # Download SnpEff for gene annotation.
   wget ${params.snpeff_url}

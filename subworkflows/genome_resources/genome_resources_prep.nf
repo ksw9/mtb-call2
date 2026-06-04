@@ -15,9 +15,6 @@ workflow GENOMERESOURCES {
   strain_name
 	
   main:
-  // Channel for scripts directory
-  scripts_dir = Channel.fromPath("${projectDir}/scripts")
-
   // DOWNLOAD REFERENCE GENOMES ----------- //
 
   DownloadRefs(assembly_identifier, strain_name)
@@ -48,12 +45,18 @@ workflow GENOMERESOURCES {
 
   // Merge channels
   DownloadRefs.out.fasta
-  .join(DownloadRefs.out.gff, by: 0, remainder: false)
-  .set{ fasta_and_gtf }
+    .join(DownloadRefs.out.gff, by: 0, remainder: false)
+    .set{ fasta_and_gtf }
 
   SnpeffInputPrep(fasta_and_gtf)
 
   emit:
+  fasta = DownloadRefs.out.fasta
+  fasta_index = FastaIndex.out.fasta_index
+  gff = DownloadRefs.out.gff
+  bwa_index = BwaIndex.out.bwa_index
+  bowtie_index = BowtieIndex.out.bowtie_index
+  gatk_dict = MakeGatkDict.out.gatk_dictionary
   snpeff_input = SnpeffInputPrep.out.snpeff_input
 
 }

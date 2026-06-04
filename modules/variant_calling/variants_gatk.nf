@@ -4,7 +4,7 @@ process VariantsGATK {
   
   label 'variantcalling'
 
-  publishDir "${projectDir}/results/${batch}/${sample_id}/vars", mode: "copy", pattern: "*_{gatk.g,gatk_unfilt}.vcf.gz"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/vars", mode: "copy", pattern: "*_{gatk.g,gatk_unfilt}.vcf.gz"
 
   input:
   each path(reference)
@@ -16,6 +16,7 @@ process VariantsGATK {
   tuple val(sample_id), val(batch), path("${sample_id}_gatk.g.vcf.gz"), emit: gatk_gvcf
   tuple val(sample_id), val(batch), path("${sample_id}_gatk_unfilt_norm.vcf.gz"), emit: gatk_vcf_unfiltered
 
+  script:
   """
   if [ ${params.vcf_variants_only} == false ]
   then 

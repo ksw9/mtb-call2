@@ -80,4 +80,16 @@ workflow GATK {
   // Annotation with bcftools
   AnnotateVCFBCFtools("gatk", bed_file, bed_file_index, vcf_header, bcftools_input)
 
+  emit:
+  gatk_gvcf = VariantsGATK.out.gatk_gvcf
+  gatk_vcf_unfiltered = VariantsGATK.out.gatk_vcf_unfiltered
+  gatk_vcf_unfiltered_index = IndexRawVCF.out.vcf_index
+  gatk_filtered_vcf = FilterVCF.out.filtered_vcf
+  gatk_filter_vcf_index = IndexFilteredVCF.out.vcf_index
+  gatk_unmasked_fasta = ConvertVCF.out.unmasked_fasta
+  gatk_masked_fasta = ConvertVCF.out.masked_fasta
+  gatk_vcf_snpeff_ann = AnnotateVCFsnpEff.out.vcf_snpeff_ann
+  gatk_vcf_snpeff_ann_index = IndexAnnotatedVCF.out.vcf_index
+  gatk_vcf_bcftools_ann = AnnotateVCFBCFtools.out.vcf_bcftools_ann
+
 }

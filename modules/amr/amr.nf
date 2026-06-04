@@ -4,14 +4,15 @@ process RunAMR {
   
   label 'amr'
 
-  publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_amr.csv"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/stats", mode: "copy", pattern: "*_amr.csv"
 
   input:
   tuple val(sample_id), val(batch), path(bam), path(bai)
 
   output:
-  path "${sample_id}_amr.csv"
+  tuple val(sample_id), val(batch), path("${sample_id}_amr.csv"), emit: amr_report
 
+  script:
   """
   mykrobe predict \
   --sample ${bam} \

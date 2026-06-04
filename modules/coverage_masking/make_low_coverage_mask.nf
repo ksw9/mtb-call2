@@ -4,7 +4,7 @@ process MakeLowCoverageMask {
   
   label 'variantcalling'
 
-  publishDir "${projectDir}/results/${batch}/${sample_id}/vars", mode: "copy", pattern: "*.bed.gz"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/vars", mode: "copy", pattern: "*.bed.gz"
 
   input:
   tuple val(sample_id), path(bam), val(batch)
@@ -12,6 +12,7 @@ process MakeLowCoverageMask {
   output:
   tuple val(sample_id), path("${sample_id}_low_coverage_mask.bed.gz"), val(batch), emit: low_coverage_mask
 
+  script:
   """
   # Compute depth for bam file at each position
   samtools depth -a ${bam} > ${sample_id}_depth.txt

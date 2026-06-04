@@ -4,7 +4,7 @@ process FilterVCF {
   
   label 'variantcalling'
 
-  publishDir "${projectDir}/results/${batch}/${sample_id}/vars", mode: "copy", pattern: "*{_filtering_stats.txt,_filtered.vcf.gz}"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/vars", mode: "copy", pattern: "*{_filtering_stats.txt,_filtered.vcf.gz}"
 
   input:
   each path(scripts_dir)
@@ -14,6 +14,7 @@ process FilterVCF {
   tuple val(sample_id), val(batch), path("${sample_id}*_filtered.vcf.gz"), emit: filtered_vcf
   tuple val(sample_id), val(batch), path("${sample_id}_filtering_stats.txt"), emit: vcf_filtering_stats
 
+  script:
   """
   bgzip -d ${vcf}
   unzipped_file=\$(basename ${vcf} | sed "s/.gz//g")

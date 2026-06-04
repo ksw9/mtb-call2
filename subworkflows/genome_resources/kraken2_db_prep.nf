@@ -26,7 +26,7 @@ workflow GENERATEKRAKEN2DB {
   // DOWNLOAD EUPATHDB46 REFERENCES ------- //
 
   // Channel for EuPathDB46 databases
-  Channel
+  channel
     .fromList( ['AmoebaDB46', 'CryptoDB46', 'FungiDB46', 'GiardiaDB46', 'MicrosporidiaDB46', 'PiroplasmaDB46', 'PlasmoDB46', 'ToxoDB46', 'TrichDB46', 'TriTrypDB46'] )
     .set{ eupath_dbs }
 
@@ -36,5 +36,8 @@ workflow GENERATEKRAKEN2DB {
   // BUILD KRAKEN2 DB --------------------- //
 
   GenerateKraken2DB(DownloadNCBI.out.fasta.collect(), DownloadEuPath.out.fasta_dir.collect())
+
+  emit:
+  kraken_db = GenerateKraken2DB.out.kraken_db
 
 }

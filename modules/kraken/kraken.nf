@@ -5,16 +5,17 @@ process Kraken {
   label 'kraken2'
 
   //publishDir "${projectDir}/results/${batch}/${sample_id}/kraken", mode: "copy", pattern: "*_kr_{1,2}.fq.gz"
-  publishDir "${projectDir}/results/${batch}/${sample_id}/kraken", mode: "copy", pattern: "*_kraken.report"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/kraken", mode: "copy", pattern: "*_kraken.report"
 
   input:
   path(kraken_db)
   tuple val(sample_id), val(batch), path(read1), path(read2)
 
   output:
-  path "*_kraken.report", emit: kraken_reports
+  tuple val(sample_id), val(batch), path("*_kraken.report"), emit: kraken_reports
   tuple val(sample_id), val(batch), path("{${sample_id}_kr_1.fq.gz,${sample_id}_kr.fq.gz}"), path("{${sample_id}_kr_2.fq.gz,mock.kr.fastq}"), emit: kraken_filtered_files
 
+  script:
   """
   if [[ "${read2}" == "mock.trim.fastq" ]]
   then
@@ -44,6 +45,6 @@ process Kraken {
     seqtk subseq ${read2} ${sample_id}_reads.list | bgzip > ${sample_id}_kr_2.fq.gz
 
   fi
+  """
 
-"""
 }

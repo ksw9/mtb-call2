@@ -5,13 +5,12 @@ process DownloadStandardKraken2DB {
 
   errorStrategy 'ignore'
 
-  publishDir "${params.resources_dir}/kraken_db", mode: "copy", pattern: "standard"
-
-  input:
+  //publishDir "${params.resources_dir}/kraken_db", mode: "copy", pattern: "standard"
 
   output:
   path "standard", optional: true, emit: kraken_db
 
+  script:
   """
   # Test that the link is good
   wget_test=\$(wget -S --spider "${params.kraken2_standard_db_link}" 2>&1)

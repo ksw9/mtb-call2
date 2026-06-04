@@ -4,7 +4,7 @@ process FastaIndex {
 
   label 'mapping'
 
-  publishDir "${params.resources_dir}/refs", mode: "copy", pattern: "*.fai"
+  //publishDir "${params.resources_dir}/refs", mode: "copy", pattern: "*.fai"
 
   input:
   tuple val(strain_name), path(fasta)
@@ -12,6 +12,7 @@ process FastaIndex {
   output:
   tuple val("${strain_name}"), path("${fasta}.fai"), emit: fasta_index
 
+  script:
   """
   samtools faidx ${fasta}
   """

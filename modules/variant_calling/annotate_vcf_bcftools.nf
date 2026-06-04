@@ -4,7 +4,7 @@ process AnnotateVCFBCFtools {
   
   label 'variantcalling'
 
-  publishDir "${projectDir}/results/${batch}/${sample_id}/vars", mode: "copy", pattern: "*_${variant_caller}_ann.vcf.gz"
+  //publishDir "${projectDir}/results/${batch}/${sample_id}/vars", mode: "copy", pattern: "*_${variant_caller}_ann.vcf.gz"
 
   input:
   each variant_caller
@@ -16,6 +16,7 @@ process AnnotateVCFBCFtools {
   output:
   tuple val(sample_id), val(batch), path("${sample_id}_${variant_caller}_ann.vcf.gz"), emit: vcf_bcftools_ann
 
+  script:
   """
   # Also use bed file to annotate vcf, zip.
   bcftools annotate -a ${bed_file} -h ${vcf_header} -c CHROM,FROM,TO,FORMAT/PPE ${vcf} | bgzip > ${sample_id}_${variant_caller}_ann.vcf.gz

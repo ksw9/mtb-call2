@@ -14,6 +14,7 @@ process AnnotateVCFsnpEff {
   output:
   tuple val(sample_id), val(batch), path("${sample_id}_${variant_caller}_ann_snpeff.vcf.gz"), emit: vcf_snpeff_ann
 
+  script:
   """
   # Rename Chromosome to be consistent with snpEff/Ensembl genomes.
   zcat ${vcf} | sed 's/NC_000962.3/Chromosome/g' | bgzip > ${sample_id}_renamed.vcf.gz
